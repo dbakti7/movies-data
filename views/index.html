@@ -61,6 +61,7 @@
     })
 
     .service('detailService', function($http) {
+        console.log("Requesting details...")
         this.getData = function(id) {
             return $http({
                 method: 'GET',
@@ -78,8 +79,10 @@
     }])
 
     .controller('MovieDetailCtrl', ['$scope', 'detailService', '$routeParams', function ($scope, detailService, $routeParams) {
+        console.log($routeParams)
         detailService.getData($routeParams.id).then(function(dataResponse) {
             $scope.result = dataResponse
+            console.log($scope.result)
         })
     }])
     
