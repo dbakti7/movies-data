@@ -11,23 +11,29 @@
 <!-- Template -->   
 <script type="text/ng-template" id="/movies.html">
   {{result}}
+  <br>
+  <input type="text" ng-model="title"/>
+  <br>
+  <button ng-click="searchFunc(title)">Search</button>
 </script>
 
 <script>
     angular.module('app', ['ngRoute'])
 
     .service('movieService', function($http) {
-        this.getData = function() {
+        this.getData = function(title) {
             return $http({
                 method: 'GET',
-                url: 'http://www.omdbapi.com/?t=Iron+fist',
+                url: 'http://www.omdbapi.com/?t=' + title,
             })
         }
     })
     .controller('MoviesController', ['$scope', 'movieService', function ($scope, movieService) {
-        movieService.getData().then(function(dataResponse) {
-            $scope.result = dataResponse
-        })
+        $scope.searchFunc = function(title) {
+            movieService.getData(title).then(function(dataResponse) {
+                $scope.result = dataResponse
+            })
+        }
     }])
     
     .config(['$routeProvider', function ($routeProvider) {
