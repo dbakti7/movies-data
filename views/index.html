@@ -10,16 +10,30 @@
   
 <!-- Template -->   
 <script type="text/ng-template" id="/movies.html">
-{{result}}
-<br>
-<br>
-  <div ng-repeat="d in result.data.Search">
-    {{d.Title}}    
+  <div ng-repeat="datum in result.data.Search">
+    <table>
+    <tr ng-repeat="(key, value) in datum">
+        <td><b>{{key}}</b></td>
+        <td ng-show="key === 'Poster'"><img src={{value}} style="width:200px; height:300px"/></td>
+        <td ng-hide="key === 'Poster'">{{value}}</td>
+        
+    </tr>
+    <tr>
+        <td><b>Link</b></td>
+        <td><a href="#/{{datum.imdbID}}">Details</a></td>
+    </tr>
+    </table>
+    <br><br>
   </div>
+  
   <br>
   <input type="text" ng-model="title"/>
   <br>
   <button ng-click="searchFunc(title)">Search</button>
+</script>
+
+<script type="text/ng-template" id="/movieDetail.html">
+{{result}}
 </script>
 
 <script>
@@ -33,12 +47,28 @@
             })
         }
     })
+
+    .service('detailService', function($http) {
+        this.getData = function(id) {
+            return $http({
+                method: 'GET',
+                url: 'http://www.omdbapi.com/?i=' + id,
+            })
+        }
+    })
+
     .controller('MoviesController', ['$scope', 'movieService', function ($scope, movieService) {
         $scope.searchFunc = function(title) {
             movieService.getData(title).then(function(dataResponse) {
                 $scope.result = dataResponse
             })
         }
+    }])
+
+    .controller('MovieDetailCtrl', ['$scope', 'detailService', '$routeParams', function ($scope, detailService, $routeParams) {
+        detailService.getData($routeParams.id).then(function(dataResponse) {
+            $scope.result = dataResponse
+        })
     }])
     
     .config(['$routeProvider', function ($routeProvider) {
@@ -47,6 +77,11 @@
             templateUrl: '/movies.html',
             controller: 'MoviesController'
         })
+
+        .when('/:id', {
+            templateUrl: '/movieDetail.html',
+            controller: 'MovieDetailCtrl'
+        });
     }])
     
     .config(['$locationProvider', function($locationProvider) {
