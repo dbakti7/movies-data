@@ -55,7 +55,7 @@
         this.getData = function(title) {
             return $http({
                 method: 'GET',
-                url: 'http://www.omdbapi.com/?s=' + title + "/",
+                url: 'https://www.omdbapi.com/?s=' + title + "/",
             })
         }
     })
@@ -64,7 +64,7 @@
         this.getData = function(id) {
             return $http({
                 method: 'GET',
-                url: 'http://www.omdbapi.com/?i=' + id + "/",
+                url: 'https://www.omdbapi.com/?i=' + id + "/",
             })
         }
     })
