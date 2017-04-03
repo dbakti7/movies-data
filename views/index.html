@@ -16,7 +16,6 @@
         <td><b>{{key}}</b></td>
         <td ng-show="key === 'Poster'"><img src={{value}} style="width:200px; height:300px"/></td>
         <td ng-hide="key === 'Poster'">{{value}}</td>
-        
     </tr>
     <tr>
         <td><b>Link</b></td>
@@ -33,7 +32,20 @@
 </script>
 
 <script type="text/ng-template" id="/movieDetail.html">
-{{result}}
+    <div ng-show="result.data.Response == 'True'">
+        <table>
+            <tr ng-repeat="(key, value) in result.data">
+                <td ng-hide="key === 'Response'"><b>{{key}}</b></td>
+                <td ng-show="key === 'Poster'"><img src={{value}} style="width:200px; height:300px"/></td>
+                <td ng-show="key === 'Website'"><a href={{value}}/>{{value}}</td>
+                <td ng-show="key === 'Ratings'">
+                    <p ng-repeat="(index, rate) in value">{{rate.Source}}: {{rate.Value}}</p>
+                </td>
+                <td ng-hide="key === 'Poster' || key === 'Response' || key === 'imdbID' || key === 'Website' || key === 'Ratings'">{{value}}</td>
+                </tr>
+            </tr>
+        </table>
+    </div>
 </script>
 
 <script>
