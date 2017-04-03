@@ -1,0 +1,46 @@
+<html ng-app="app">
+<head>
+  <title>Movies Data</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular-route.min.js"></script>
+</head>
+<body>
+
+<ng-view></ng-view>
+  
+<!-- Template -->   
+<script type="text/ng-template" id="/movies.html">
+  {{result}}
+</script>
+
+<script>
+    angular.module('app', ['ngRoute'])
+
+    .service('movieService', function($http) {
+        this.getData = function() {
+            return $http({
+                method: 'GET',
+                url: 'http://www.omdbapi.com/?t=Iron+fist',
+            })
+        }
+    })
+    .controller('MoviesController', ['$scope', 'movieService', function ($scope, movieService) {
+        movieService.getData().then(function(dataResponse) {
+            $scope.result = dataResponse
+        })
+    }])
+    
+    .config(['$routeProvider', function ($routeProvider) {
+        $routeProvider
+        .when('/', {
+            templateUrl: '/movies.html',
+            controller: 'MoviesController'
+        })
+    }])
+    
+    .config(['$locationProvider', function($locationProvider) {
+        $locationProvider.hashPrefix("");
+    }]);
+</script>
+</body>
+</html>
